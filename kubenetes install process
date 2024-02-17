@@ -1,0 +1,42 @@
+    sudo su
+    1apt updte  & apt install unzip -y
+    2  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    3  unzip awscliv2.zip
+    4  sudo ./aws/install
+    5  aws --version
+     awscli  for ubuntu from scratch
+    create a role of eks administrative access
+     iam -> role-> ec2toeksrole -> administrative access 
+    6  curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+    7  cd /tmp/
+    8  ls
+    9  sudo mv /tmp/eksctl /usr/local/bin
+    9  cd
+   10  eksctl
+   11 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+   12 ls
+   13  chmod +x kubectl
+   14  mv kubectl /usr/local/bin
+   15  ls
+   16  eksctl create cluster --name "mycluster" --version 1.28 \ --zones=ap-south-1a,ap-south-1b,ap-south-1c --without-nodegroup
+   17  aws configure
+   18  eksctl create cluster --name "mycluster" --version 1.28 \ --zones=ap-south-1a,ap-south-1b,ap-south-1c --without-nodegroup
+   19    kubectl cluster-info
+   20  alias k=kubectl
+   21  eksctl associate-iam-oldc-provider --region ap-south-1 --cluster mycluster --approve
+   22  eksctl create nodegroup --cluster=mycluster --region=ap-south-1 --name=mycluster-ng-1 --node-type=t2.micro --nodes=2 --nodes-min=2 --nodes-max=4 --node-volume-size=20 --ssh-access --ssh-public-key=eks-admin --managed --asg-access --external-dns-access --full-ecr-access --appmesh-access --alb-ingress-access
+   23  k run nginx --image nginx
+   24  k get po
+   25  k expose pod nginx --port 80 --type NodePort
+   26  k get svc
+   27  k expose pod mysql --port 3306 --type NodePort
+   28  k run mysql --image mysql
+   29  k get po
+   30  k get nodes
+   31  k expose pod mysql --port 3306 --type NodePort
+   32  k get po
+   33  k run mysql --image mysql
+   34  k get po
+   35  k expose pod mysql --port 3306 --type NodePort
+   36  k get svc
+   37  eksctl delete nodegroup --cluster mycluster --name mycluster-ng-1
